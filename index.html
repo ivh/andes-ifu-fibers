@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ANDES IFU slit design</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header>
+  <h1>ANDES IFU slit design playground</h1>
+  <p class="sub">61-spaxel hexagon (S + rings S4&hellip;S1) routed to the 75-slot YJH pseudo-slit.
+  Re-assign fibres between focal plane and slit, and toggle a removable spaxel mask so that
+  every second slit position goes dark. Baseline layout per E-AND-SW-SPE-09-00-002 v1.2, Fig.&nbsp;2.</p>
+</header>
+
+<nav id="toolbar">
+  <div class="group">
+    <span class="glabel">Mode</span>
+    <button id="mode-assign" class="seg on" title="Click two positions (hexagon or slit) to swap fibre routing [a]">Assign</button>
+    <button id="mode-mask" class="seg" title="Click a spaxel or slit position to toggle its mask [m]">Mask</button>
+  </div>
+  <div class="group">
+    <span class="glabel">Mask sticks to</span>
+    <button id="anchor-spaxel" class="seg on" title="Re-routing fibres moves the mask pattern along in the slit; the hexagon pattern stays put">spaxel</button>
+    <button id="anchor-slit" class="seg" title="The masked slit positions stay fixed; re-routing changes which spaxels are masked in the hexagon">slit position</button>
+  </div>
+  <div class="group">
+    <span class="glabel">Labels</span>
+    <select id="labelmode">
+      <option value="slit">slit position</option>
+      <option value="name">spaxel name</option>
+      <option value="none">none</option>
+    </select>
+  </div>
+  <div class="group">
+    <span class="glabel">Assignment</span>
+    <button id="p-baseline" title="Ring-ordered routing as in the DRL spec">Baseline</button>
+    <button id="p-halfring" title="Within each ring block, interleave opposite half-arcs; alternating mask then blocks contiguous half-rings">Half-ring interleave</button>
+    <button id="p-halfhex" title="Interleave left and right halves of the hexagon along the whole slit">Half-hex interleave</button>
+    <button id="p-shuffle" title="Random routing">Shuffle</button>
+  </div>
+  <div class="group">
+    <span class="glabel">Mask</span>
+    <button id="m-alta" title="Mask odd positions within each contiguous fibre run (S4 fibres stay lit)">Alternate A</button>
+    <button id="m-altb" title="Mask even positions within each contiguous fibre run (complement of A)">Alternate B</button>
+    <button id="m-invert" title="Swap masked and unmasked spaxels">Invert</button>
+    <button id="m-clear" title="Unmask all spaxels">Clear</button>
+  </div>
+  <div class="group">
+    <button id="undo" title="Undo [ctrl-z]">Undo</button>
+    <button id="redo" title="Redo [ctrl-shift-z]">Redo</button>
+  </div>
+  <div class="group">
+    <button id="export">Export</button>
+    <button id="import">Import</button>
+    <button id="share" title="Copy a URL that encodes the current design">Share URL</button>
+    <button id="reset" title="Back to baseline routing, no mask">Reset</button>
+    <input type="file" id="importfile" accept=".json,application/json" hidden>
+  </div>
+</nav>
+
+<main>
+  <section id="hexpane">
+    <h2>Sky focal plane</h2>
+    <svg id="hexsvg" viewBox="-8.4 -8.6 16.8 17.2"></svg>
+  </section>
+  <aside id="side">
+    <div class="card" id="statscard">
+      <h3>Slit status</h3>
+      <div id="headline"></div>
+      <table id="ringtable"></table>
+    </div>
+    <div class="card">
+      <h3>Selection</h3>
+      <div id="selinfo">nothing selected</div>
+    </div>
+    <div class="card">
+      <h3>Legend</h3>
+      <div id="legend"></div>
+    </div>
+    <div class="card help">
+      <h3>How to use</h3>
+      <ul>
+        <li><b>Assign</b>: click two positions (spaxel or slit slot, any combination) to swap their fibre routing. The 12 dark slots can be moved the same way; only the two calibration fibres are fixed.</li>
+        <li><b>Mask</b>: click a spaxel or slit slot to toggle its mask. Shift-click does this in any mode.</li>
+        <li><b>Mask sticks to</b>: when re-routing, the mask pattern either travels with the spaxels (hexagon fixed, slit changes) or stays at its slit positions (slit fixed, hexagon changes).</li>
+        <li>Hovering links the two views; labels on the hexagon show where each spaxel ends up in the slit.</li>
+        <li>Red bars under the slit mark adjacent lit fibres (crosstalk); the goal of the mask is zero.</li>
+        <li>The design autosaves in the browser; use Export / Share URL to keep or send a variant.</li>
+      </ul>
+    </div>
+  </aside>
+</main>
+
+<section id="slitpane">
+  <h2>Spectrograph pseudo-slit <span class="dim">(slot 1 at left)</span></h2>
+  <svg id="slitsvg" viewBox="0 0 752 27"></svg>
+</section>
+
+<div id="tip" hidden></div>
+<script src="app.js"></script>
+</body>
+</html>
