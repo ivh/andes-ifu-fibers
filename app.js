@@ -69,17 +69,22 @@ let mode = 'assign', labelMode = 'slit', sel = null, maskAnchor = 'spaxel';
 
 const slotNum = id => posOf[id] + 2;   // 1-based slit position for display
 
-// Tom's design, July 2026 (same as mask1.json): outer ring S1 plus S2-10 masked,
-// conflict-free in both the masked and the inverted-mask exposure
-const MASK1 = {
+// Tom's design: outer ring S1 plus S2-10 masked, conflict-free in both the
+// masked and the inverted-mask exposure. The authoritative version is
+// mask1.json, fetched at load; this embedded copy is the file:// fallback.
+let MASK1 = {
   v: 2,
-  order: [61, 0, 62, 25, 64, 1, 65, 2, 66, 3, 67, 4, 68, 5, 69, 6, 70, 7, 72, 9,
+  order: [61, 0, 62, 6, 64, 1, 65, 2, 66, 3, 67, 4, 68, 5, 69, 18, 70, 7, 72, 9,
           71, 11, 51, 13, 55, 15, 57, 17, 37, 8, 41, 10, 39, 12, 43, 14, 47, 16,
-          49, 18, 53, 30, 60, 32, 59, 34, 45, 36, 38, 19, 40, 33, 42, 21, 44, 20,
+          49, 25, 53, 30, 60, 32, 59, 34, 45, 36, 38, 19, 40, 33, 42, 21, 44, 20,
           46, 22, 48, 27, 50, 29, 52, 24, 54, 31, 56, 26, 58, 23, 28, 35, 63],
   masked: [28, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52,
            53, 54, 55, 56, 57, 58, 59, 60]
 };
+fetch('mask1.json')
+  .then(r => r.ok ? r.json() : null)
+  .then(j => { if (j) { deserialize(j); MASK1 = j; } })
+  .catch(() => { });
 
 function shuffleSeq() {
   const p = Array.from({ length: NF }, (_, i) => i);
