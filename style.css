@@ -8,7 +8,7 @@ body {
 header { padding: 14px 22px 6px; }
 h1 { margin: 0 0 4px; font-size: 22px; }
 .sub { margin: 0; max-width: 980px; color: #555b64; font-size: 13.5px; }
-h2 { font-size: 15px; margin: 0 0 6px; color: #333a44; }
+h2 { font-size: 13px; margin: 0 0 6px; text-transform: uppercase; letter-spacing: .04em; color: #6a7280; font-weight: 600; }
 h3 { font-size: 13px; margin: 0 0 6px; text-transform: uppercase; letter-spacing: .04em; color: #6a7280; }
 .dim { color: #98a0ab; font-weight: normal; font-size: 12px; }
 
@@ -29,9 +29,9 @@ button:hover { background: #eef1f5; }
 button.seg.on { background: #2d5fd0; border-color: #2d5fd0; color: #fff; }
 button:disabled { opacity: .4; cursor: default; }
 
-main { display: flex; gap: 18px; padding: 14px 22px 0; align-items: flex-start; }
-#hexpane { flex: 0 1 640px; }
-#hexsvg { width: 100%; height: auto; background: #fff; border: 1px solid #e3e6ea; border-radius: 10px; }
+main { display: flex; gap: 18px; padding: 14px 22px 26px; align-items: flex-start; }
+#hexpane { flex: 0 1 640px; background: #fff; border: 1px solid #e3e6ea; border-radius: 10px; padding: 10px 14px 14px; }
+#hexsvg { width: 100%; height: auto; }
 #side { flex: 1 1 300px; min-width: 280px; display: flex; flex-direction: column; gap: 12px; }
 .card { background: #fff; border: 1px solid #e3e6ea; border-radius: 10px; padding: 10px 14px; }
 .card.help ul { margin: 0; padding-left: 18px; font-size: 13px; color: #4d545e; }
@@ -50,8 +50,8 @@ main { display: flex; gap: 18px; padding: 14px 22px 0; align-items: flex-start; 
 #legend { display: flex; flex-wrap: wrap; gap: 4px 14px; font-size: 12.5px; }
 #legend span { white-space: nowrap; }
 
-#slitpane { padding: 16px 22px 26px; }
-#slitsvg { width: 100%; height: auto; background: #fff; border: 1px solid #e3e6ea; border-radius: 10px; }
+#slitpane { margin: 14px 22px 0; background: #fff; border: 1px solid #e3e6ea; border-radius: 10px; padding: 10px 14px 6px; }
+#slitsvg { width: 100%; height: auto; }
 
 svg text { pointer-events: none; user-select: none; }
 .cell { cursor: pointer; }
