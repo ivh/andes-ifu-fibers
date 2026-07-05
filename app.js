@@ -69,23 +69,17 @@ let mode = 'assign', labelMode = 'slit', sel = null, maskAnchor = 'spaxel';
 
 const slotNum = id => posOf[id] + 2;   // 1-based slit position for display
 
-function halfRingSeq() {
-  const seq = [];
-  for (const ids of ringGroups) {
-    const h = Math.ceil(ids.length / 2);
-    const a = ids.slice(0, h), b = ids.slice(h);
-    for (let i = 0; i < h; i++) { seq.push(a[i]); if (i < b.length) seq.push(b[i]); }
-  }
-  return seq;
-}
-
-function halfHexSeq() {
-  const sorted = [...spaxels].sort((p, q) => p.x - q.x || p.y - q.y).map(s => s.id);
-  const a = sorted.slice(0, 31), b = sorted.slice(31);
-  const seq = [];
-  for (let i = 0; i < 31; i++) { seq.push(a[i]); if (i < b.length) seq.push(b[i]); }
-  return seq;
-}
+// Tom's design, July 2026 (same as mask1.json): outer ring S1 plus S2-10 masked,
+// conflict-free in both the masked and the inverted-mask exposure
+const MASK1 = {
+  v: 2,
+  order: [61, 0, 62, 25, 64, 1, 65, 2, 66, 3, 67, 4, 68, 5, 69, 6, 70, 7, 72, 9,
+          71, 11, 51, 13, 55, 15, 57, 17, 37, 8, 41, 10, 39, 12, 43, 14, 47, 16,
+          49, 18, 53, 30, 60, 32, 59, 34, 45, 36, 38, 19, 40, 33, 42, 21, 44, 20,
+          46, 22, 48, 27, 50, 29, 52, 24, 54, 31, 56, 26, 58, 23, 28, 35, 63],
+  masked: [28, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52,
+           53, 54, 55, 56, 57, 58, 59, 60]
+};
 
 function shuffleSeq() {
   const p = Array.from({ length: NF }, (_, i) => i);
@@ -310,6 +304,8 @@ function update() {
   document.getElementById('ringtable').innerHTML =
     `<tr><th>ring</th><th></th></tr>` + rows;
 
+  document.getElementById('m-alt').classList.toggle('on', isAlternate());
+
   const si = document.getElementById('selinfo');
   if (sel === null) {
     si.textContent = mode === 'assign'
@@ -398,11 +394,16 @@ document.getElementById('mode-assign').onclick = () => setMode('assign');
 document.getElementById('mode-mask').onclick = () => setMode('mask');
 document.getElementById('labelmode').onchange = e => { labelMode = e.target.value; update(); };
 document.getElementById('p-baseline').onclick = () => applyOrder(baselineOrder());
-document.getElementById('p-halfring').onclick = () => applyOrder(orderFromSpaxelSeq(halfRingSeq()));
-document.getElementById('p-halfhex').onclick = () => applyOrder(orderFromSpaxelSeq(halfHexSeq()));
+document.getElementById('p-mask1').onclick = () => {
+  pushUndo(); state = deserialize(MASK1); sel = null; update();
+};
 document.getElementById('p-shuffle').onclick = () => applyOrder(orderFromSpaxelSeq(shuffleSeq()));
-document.getElementById('m-alta').onclick = () => applyMask(alternateMask(1));
-document.getElementById('m-altb').onclick = () => applyMask(alternateMask(0));
+function isAlternate() {
+  const cur = JSON.stringify(state.masked);
+  return cur === JSON.stringify(alternateMask(1)) || cur === JSON.stringify(alternateMask(0));
+}
+document.getElementById('m-alt').onclick = () =>
+  applyMask(isAlternate() ? new Array(NF).fill(false) : alternateMask(1));
 document.getElementById('m-invert').onclick = () => applyMask(state.masked.map(m => !m));
 document.getElementById('m-clear').onclick = () => applyMask(new Array(NF).fill(false));
 document.getElementById('undo').onclick = undo;

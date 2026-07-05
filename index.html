@@ -36,14 +36,12 @@
   <div class="group">
     <span class="glabel">Assignment</span>
     <button id="p-baseline" title="Ring-ordered routing as in the DRL spec">Baseline</button>
-    <button id="p-halfring" title="Within each ring block, interleave opposite half-arcs; alternating mask then blocks contiguous half-rings">Half-ring interleave</button>
-    <button id="p-halfhex" title="Interleave left and right halves of the hexagon along the whole slit">Half-hex interleave</button>
+    <button id="p-mask1" title="Routing plus mask covering the outer ring S1 and S2-10; conflict-free in both exposures (loads mask1.json)">mask1</button>
     <button id="p-shuffle" title="Random routing">Shuffle</button>
   </div>
   <div class="group">
     <span class="glabel">Mask</span>
-    <button id="m-alta" title="Mask odd positions within each contiguous fibre run (S4 fibres stay lit)">Alternate A</button>
-    <button id="m-altb" title="Mask even positions within each contiguous fibre run (complement of A)">Alternate B</button>
+    <button id="m-alt" class="seg" title="Toggle an alternating mask (every second fibre in each contiguous run); use Invert for the complementary exposure">Alternate</button>
     <button id="m-invert" title="Swap masked and unmasked spaxels">Invert</button>
     <button id="m-clear" title="Unmask all spaxels">Clear</button>
   </div>
